@@ -10,6 +10,9 @@ const { buildObject } = require('./helpers');
 const PATH = `${__dirname}/../../data/raw/text_data`;
 const OUTPUT_PATH = `${__dirname}/../../data/formatted`;
 
+// argument is passed in via npm script
+const argumentOne = process.argv.slice(2)[0];
+
 readdir(PATH, { encoding: 'buffer' })
   .then(files => {
     const stats = Promise.map(files, file => lstat(`${PATH}/${file}`));
@@ -36,8 +39,14 @@ readdir(PATH, { encoding: 'buffer' })
     const fileNames = data[1];
     // generate the paths of each file
     const paths = [];
+    // 
     for (let i = 0; i < directories.length && fileNames.length; i++) {
-      _.each(fileNames[i], fileName => paths.push(`${directories[i]}/${fileName}`));
+      // build the whole file or part of the file
+      const iterateUntil = argumentOne === 'dev'
+        ? 1 : fileNames[i].length;
+      for (let j = 0; j < iterateUntil; j++) {
+        paths.push(`${directories[i]}/${fileNames[i][j]}`);
+      }
     }
     return paths;
   })
@@ -60,10 +69,12 @@ readdir(PATH, { encoding: 'buffer' })
   })
   .then(objects => {
     // write file
-    const json = { data: objects };
-    const path = `${OUTPUT_PATH}/pre_enriched.json`;
+    const fileName = argumentOne === 'dev'
+      ? 'pre_enriched_sample.json' : 'pre_enriched.json';
+    const json = JSON.stringify({ data: objects });
+    const path = `${OUTPUT_PATH}/${fileName}`;
     console.log('Writing file');
-    return writeFile(path, JSON.stringify(json))
+    return Promise.all([fileName, writeFile(path, json)]);
   })
-  .then(() => console.log('Complete build: data/formatted/pre_enriched.json'))
+  .then((data) => console.log(`Complete build: data/formatted/${data[0]}`))
   .catch(err => console.log(err));
