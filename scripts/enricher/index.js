@@ -2,7 +2,7 @@ const Promise = require('bluebird');
 const fs = require('fs');
 const readFile = Promise.promisify(fs.readFile);
 const writeFile = Promise.promisify(fs.writeFile);
-const { enrich } = require('./helpers');
+const { enrich, simplify } = require('./helpers');
 const _ = require('lodash');
 
 const argumentOne = process.argv.slice(2)[0];
@@ -25,9 +25,12 @@ readFile(INPUT_PATH, 'utf8')
   .then(data => {
     console.log('Building enriched documents');
     const docs = data[0];
-    // remove the keys that aren't interesting
-    const enrichments = data[1]
-      .map(d => _.omit(d, ['status', 'usage', 'totalTransactions']));
+    // de-nest data
+    const simplifiedEnrichments = data[1].map(el => simplify(el));
+    // remove the keys that aren't needed
+    const removeFields = ['status', 'usage', 'totalTransactions',
+                          'entities', 'concepts', 'docSentiment'];
+    const enrichments = simplifiedEnrichments.map(d => _.omit(d, removeFields));
     // add the enrichments to the docs
     for (let i = 0; i < docs.length && enrichments.length; i++) {
       _.assignIn(docs[i], enrichments[i])

@@ -27,3 +27,10 @@ Can build a function that accepts an array of features or
 use a hash so that a simple string can be passed in
 and have constant time lookup to commonly combined features
 */
+
+exports.simplify = data => {
+  data.concepts_text = data.concepts.map(el => el.text);
+  data.entities_text = data.entities.map(el => el.text);
+  data.sentiment_type = data.docSentiment.type;
+  return data;
+};
