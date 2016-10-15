@@ -9,7 +9,7 @@
     "build:pre-enriched-dev": "node scripts/parser/index.js dev",
     "build:enriched-dev": "node scripts/enricher/index.js dev",
     "build:enriched": "echo 'that is a lot of api calls...'",
-    "db:health": "node scripts/db/info.js"
+    "build:db": "node scripts/db/index.js"
   },
   "keywords": [],
   "author": "",
