@@ -42,8 +42,10 @@ readdir(PATH, { encoding: 'buffer' })
     // 
     for (let i = 0; i < directories.length && fileNames.length; i++) {
       // build the whole file or part of the file
+      // there are 5 directories, so the total output will be
+      // 5 times the value of iterateUntil
       const iterateUntil = argumentOne === 'dev'
-        ? 1 : fileNames[i].length;
+        ? 50 : fileNames[i].length;
       for (let j = 0; j < iterateUntil; j++) {
         paths.push(`${directories[i]}/${fileNames[i][j]}`);
       }

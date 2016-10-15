@@ -69,3 +69,19 @@ exports.addBulkDocuments = (docs, index, type) => {
     });
   });
 }
+
+exports.search = query => {
+  return new Promise((resolve, reject) => {
+    client.search(query, (err, resp, status) => {
+      if (err) {
+        reject(err);
+      } else {
+        console.log('--- Response ---');
+        console.log(resp);
+        console.log('--- Hits ---');
+        resp.hits.hits.forEach(hit => console.log(hit));
+        resolve(resp);
+      }
+    });
+  });
+}
