@@ -45,7 +45,20 @@ To enrich all of the documents, you can edit the ```package.json``` file and cha
 script ```build:enriched``` to ```node scripts/enricher/index.js```.
 Running a combined call on that many documents is a lot of API calls...  
 
-So now it is time to put the data into elasticsearch
+So now it is time to put the data into elasticsearch. Make sure to have elasticsearch
+installed and and running. The default URI is ```localhost:9200```. It is currently
+hard coded into ```scripts/db/connection.js``` but it could also be placed in the
+```.env``` file as an environmental variable.  
+
+To bulk add data to elasticsearch, run the script:  
+```
+$ npm run build:db
+```
+
+This will read the file ```data/formatted/enriched_sample.json``` and bulk add it to
+elasticsearch.
+
+Next, on to the query system.
 
 ## Technologies
 - Node.js
