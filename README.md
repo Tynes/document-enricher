@@ -1,4 +1,5 @@
 # Document Enricher
+Note: Requires Node v6+
 
 ## Overview
 Provide a gist for how to run your pipeline.
@@ -31,7 +32,7 @@ only a sample of data. To do so, run the script:
 $ npm run build:pre-enriched-dev
 ```
 This will build a file called ```data/formatted/pre_enriched_sample.json```.
-It will have 5 documents in it. In the future, it can be possible to have
+It will have 250 documents in it. In the future, it can be possible to have
 __n__ documents using [npm script arguments](https://docs.npmjs.com/cli/run-script).
 
 Next, the JSON objects must be enriched.  
@@ -58,7 +59,17 @@ $ npm run build:db
 This will read the file ```data/formatted/enriched_sample.json``` and bulk add it to
 elasticsearch.
 
-Next, on to the query system.
+To query elasticsearch, there is a query script.
+It currently only supports simple searching through
+the concepts of an article. More functionality planned
+for the future. To search, run the script:  
+```
+$ npm run query -- QUERY_HERE
+```
+
+It is important to place the query at the end of the script.
+The script will print the docs that match.
+
 
 ## Technologies
 - Node.js
@@ -67,9 +78,9 @@ Next, on to the query system.
 
 ## Queries
 Example queries:
-What are the top entities of type "Person" mentioned in the corpus?
-What is the document count by day?
-What is the average doc sentiment by day?
+- What are the top entities of type "Person" mentioned in the corpus?
+- What is the document count by day?
+- What is the average doc sentiment by day?
 
 ## Dataset
 http://mlg.ucd.ie/datasets/bbc.html
@@ -78,3 +89,6 @@ http://mlg.ucd.ie/datasets/bbc.html
 ```
 $ npm test
 ```
+
+## Issues
+- Sometimes a query will return too many documents
