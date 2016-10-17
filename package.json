@@ -4,7 +4,7 @@
   "description": "enriches documents with alchemy-api",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "build:pre-enriched": "node scripts/parser/index.js",
     "build:pre-enriched-dev": "node scripts/parser/index.js dev",
     "build:enriched-dev": "node scripts/enricher/index.js dev",
