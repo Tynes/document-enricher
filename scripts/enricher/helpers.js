@@ -1,7 +1,7 @@
 const alchemy = require('./connection');
 
 // currently hard-coded with a few features that look interesting
-
+// async enrich function, returns a promise
 exports.enrich = text => {
   const features = ['doc-sentiment', 'concept', 'entity', 'doc-emotion'];
   return new Promise((resolve, reject) => {
@@ -28,6 +28,8 @@ use a hash so that a simple string can be passed in
 and have constant time lookup to commonly combined features
 */
 
+// simplfiy the nested data returned from the AlchemyAPI
+// this makes using elasticsearch easier
 exports.simplify = data => {
   data.concepts_text = data.concepts.map(el => el.text);
   data.entities_text = data.entities.map(el => el.text);

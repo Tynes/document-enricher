@@ -7,15 +7,17 @@ const readFile = Promise.promisify(fs.readFile);
 const writeFile = Promise.promisify(fs.writeFile);
 const { buildObject } = require('./helpers');
 
-const PATH = `${__dirname}/../../data/raw/text_data`;
+// paths point to the data folder
+const INPUT_PATH = `${__dirname}/../../data/raw/text_data`;
 const OUTPUT_PATH = `${__dirname}/../../data/formatted`;
 
 // argument is passed in via npm script
 const argumentOne = process.argv.slice(2)[0];
 
-readdir(PATH, { encoding: 'buffer' })
+console.log(`Starting to parse: ${INPUT_PATH}`);
+readdir(INPUT_PATH, { encoding: 'buffer' })
   .then(files => {
-    const stats = Promise.map(files, file => lstat(`${PATH}/${file}`));
+    const stats = Promise.map(files, file => lstat(`${INPUT_PATH}/${file}`));
     return Promise.all([files, stats])
   })
   .then(data => {
@@ -29,7 +31,7 @@ readdir(PATH, { encoding: 'buffer' })
   .then(directories => {
     // get contents of the directories
     const fileNames = Promise
-      .map(directories, d => readdir(`/${PATH}/${d[0]}`));
+      .map(directories, d => readdir(`/${INPUT_PATH}/${d[0]}`));
     // pass along the names, no longer need the stat objects
     const paths = directories.map(d => d[0]);
     return Promise.all([paths, fileNames])
@@ -54,7 +56,7 @@ readdir(PATH, { encoding: 'buffer' })
   })
   .then(bases => {
     // read the files
-    const files = Promise.map(bases, base => readFile(`${PATH}/${base}`, 'utf8'))
+    const files = Promise.map(bases, base => readFile(`${INPUT_PATH}/${base}`, 'utf8'))
     console.log('Reading text files: data/raw/text_data/*');
     return Promise.all([bases, files])
   })
@@ -71,6 +73,7 @@ readdir(PATH, { encoding: 'buffer' })
   })
   .then(objects => {
     // write file
+    // name file based on command line argument
     const fileName = argumentOne === 'dev'
       ? 'pre_enriched_sample.json' : 'pre_enriched.json';
     const json = JSON.stringify({ data: objects });
