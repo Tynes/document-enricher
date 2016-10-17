@@ -2,7 +2,11 @@
 Note: Requires Node v6+
 
 ## Overview
-Provide a gist for how to run your pipeline.
+There are a series of npm scripts that will set up the pipeline.
+The first script turns the text files found in ```data/raw/text_data``` into JSON files.
+The second script will send the JSON files to AlchemyAPI for enrichment.
+The third script will populate elasticsearch with the enriched data.
+The fourth script can be used to query elasticsearch.
 
 ## Environmental Variables
 Create a .env file in the root of the project that looks like this:
@@ -40,7 +44,7 @@ Run the script:
 ```
 $ npm run build:enriched-dev
 ```
-This will enrich the five documents from ```data/formatted/pre_enriched_sample.json```
+This will enrich the documents from ```data/formatted/pre_enriched_sample.json```
 and write them into a file called ```data/formatted/enriched_sample.json```.
 To enrich all of the documents, you can edit the ```package.json``` file and change the
 script ```build:enriched``` to ```node scripts/enricher/index.js```.
@@ -61,7 +65,7 @@ elasticsearch.
 
 To query elasticsearch, there is a query script.
 It currently only supports simple searching through
-the concepts of an article. More functionality planned
+the types of entities in an article. More functionality planned
 for the future. To search, run the script:  
 ```
 $ npm run query -- QUERY_HERE
@@ -70,6 +74,7 @@ $ npm run query -- QUERY_HERE
 It is important to place the query at the end of the script.
 The script will print the docs that match.
 
+It would also be possible to write the results of the query to a file.
 
 ## Technologies
 - Node.js
@@ -79,8 +84,9 @@ The script will print the docs that match.
 ## Queries
 Example queries:
 - What are the top entities of type "Person" mentioned in the corpus?
-- What is the document count by day?
-- What is the average doc sentiment by day?
+Run the command:
+```$ npm run query -- Person```  
+This will print the full documents that are about people.
 
 ## Dataset
 http://mlg.ucd.ie/datasets/bbc.html
