@@ -33,6 +33,7 @@ and have constant time lookup to commonly combined features
 exports.simplify = data => {
   data.concepts_text = data.concepts.map(el => el.text);
   data.entities_text = data.entities.map(el => el.text);
+  data.entities_type = data.entities.map(el => el.type);
   data.sentiment_type = data.docSentiment.type;
   return data;
 };
